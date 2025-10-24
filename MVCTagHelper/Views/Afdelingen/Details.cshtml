@@ -2,10 +2,17 @@
 
 @{
     ViewData["Title"] = "Details";
+
+    var card = new MVCTagHelper.ViewModels.AfdelingCard();
+    card.AfdelingNaam = Model.AfdelingNaam;
+    card.AfdelingId = Model.AfdelingId;
+    card.LandCode = Model.Locatie.Land.LandCode;
+    card.Locatie = Model.Locatie.Stad;
+    card.Land = Model.Locatie.Land.LandNaam;
 }
 
 <h1>Details</h1>
-
+<afdeling-card afdeling-card="@card"></afdeling-card>
 <div>
     <h4>Afdeling</h4>
     <hr />

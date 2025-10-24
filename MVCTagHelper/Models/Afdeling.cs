@@ -6,5 +6,7 @@
         public string AfdelingNaam { get; set; }
         public int LocatieId { get; set; }
         public Locatie? Locatie { get; set; }
+
+        public ICollection<Medewerker>? Medewerkers { get; set; }
     }
 }

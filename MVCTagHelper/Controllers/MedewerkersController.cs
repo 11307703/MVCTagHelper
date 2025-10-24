@@ -10,91 +10,90 @@ using MVCTagHelper.Models;
 
 namespace MVCTagHelper.Controllers
 {
-    public class AfdelingenController : Controller
+    public class MedewerkersController : Controller
     {
         private readonly TagHelperDbContext _context;
 
-        public AfdelingenController(TagHelperDbContext context)
+        public MedewerkersController(TagHelperDbContext context)
         {
             _context = context;
         }
 
-        // GET: Afdelingen
+        // GET: Medewerkers
         public async Task<IActionResult> Index()
         {
-            var tagHelperDbContext = _context.Afdelingen.Include(a => a.Locatie);
+            var tagHelperDbContext = _context.Medewerkers.Include(m => m.Afdeling);
             return View(await tagHelperDbContext.ToListAsync());
         }
 
-        // GET: Afdelingen/Details/5
+        // GET: Medewerkers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Afdelingen == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var afdeling = await _context.Afdelingen
-                .Include(a => a.Locatie)
-                .ThenInclude(l => l.Land)
-                .FirstOrDefaultAsync(m => m.AfdelingId == id);
-            if (afdeling == null)
+            var medewerker = await _context.Medewerkers
+                .Include(m => m.Afdeling)
+                .FirstOrDefaultAsync(m => m.MedewerkerId == id);
+            if (medewerker == null)
             {
                 return NotFound();
             }
 
-            return View(afdeling);
+            return View(medewerker);
         }
 
-        // GET: Afdelingen/Create
+        // GET: Medewerkers/Create
         public IActionResult Create()
         {
-            ViewData["LocatieId"] = new SelectList(_context.Locaties, "LocatieId", "LocatieId");
+            ViewData["AfdelingId"] = new SelectList(_context.Afdelingen, "AfdelingId", "AfdelingId");
             return View();
         }
 
-        // POST: Afdelingen/Create
+        // POST: Medewerkers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AfdelingId,AfdelingNaam,LocatieId")] Afdeling afdeling)
+        public async Task<IActionResult> Create([Bind("MedewerkerId,AfdelingId,Naam,Voornaam,Email")] Medewerker medewerker)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(afdeling);
+                _context.Add(medewerker);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LocatieId"] = new SelectList(_context.Locaties, "LocatieId", "LocatieId", afdeling.LocatieId);
-            return View(afdeling);
+            ViewData["AfdelingId"] = new SelectList(_context.Afdelingen, "AfdelingId", "AfdelingId", medewerker.AfdelingId);
+            return View(medewerker);
         }
 
-        // GET: Afdelingen/Edit/5
+        // GET: Medewerkers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Afdelingen == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var afdeling = await _context.Afdelingen.FindAsync(id);
-            if (afdeling == null)
+            var medewerker = await _context.Medewerkers.FindAsync(id);
+            if (medewerker == null)
             {
                 return NotFound();
             }
-            ViewData["LocatieId"] = new SelectList(_context.Locaties, "LocatieId", "LocatieId", afdeling.LocatieId);
-            return View(afdeling);
+            ViewData["AfdelingId"] = new SelectList(_context.Afdelingen, "AfdelingId", "AfdelingId", medewerker.AfdelingId);
+            return View(medewerker);
         }
 
-        // POST: Afdelingen/Edit/5
+        // POST: Medewerkers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AfdelingId,AfdelingNaam,LocatieId")] Afdeling afdeling)
+        public async Task<IActionResult> Edit(int id, [Bind("MedewerkerId,AfdelingId,Naam,Voornaam,Email")] Medewerker medewerker)
         {
-            if (id != afdeling.AfdelingId)
+            if (id != medewerker.MedewerkerId)
             {
                 return NotFound();
             }
@@ -103,12 +102,12 @@ namespace MVCTagHelper.Controllers
             {
                 try
                 {
-                    _context.Update(afdeling);
+                    _context.Update(medewerker);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AfdelingExists(afdeling.AfdelingId))
+                    if (!MedewerkerExists(medewerker.MedewerkerId))
                     {
                         return NotFound();
                     }
@@ -119,51 +118,47 @@ namespace MVCTagHelper.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LocatieId"] = new SelectList(_context.Locaties, "LocatieId", "LocatieId", afdeling.LocatieId);
-            return View(afdeling);
+            ViewData["AfdelingId"] = new SelectList(_context.Afdelingen, "AfdelingId", "AfdelingId", medewerker.AfdelingId);
+            return View(medewerker);
         }
 
-        // GET: Afdelingen/Delete/5
+        // GET: Medewerkers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Afdelingen == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var afdeling = await _context.Afdelingen
-                .Include(a => a.Locatie)
-                .FirstOrDefaultAsync(m => m.AfdelingId == id);
-            if (afdeling == null)
+            var medewerker = await _context.Medewerkers
+                .Include(m => m.Afdeling)
+                .FirstOrDefaultAsync(m => m.MedewerkerId == id);
+            if (medewerker == null)
             {
                 return NotFound();
             }
 
-            return View(afdeling);
+            return View(medewerker);
         }
 
-        // POST: Afdelingen/Delete/5
+        // POST: Medewerkers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Afdelingen == null)
+            var medewerker = await _context.Medewerkers.FindAsync(id);
+            if (medewerker != null)
             {
-                return Problem("Entity set 'TagHelperDbContext.Afdelingen'  is null.");
+                _context.Medewerkers.Remove(medewerker);
             }
-            var afdeling = await _context.Afdelingen.FindAsync(id);
-            if (afdeling != null)
-            {
-                _context.Afdelingen.Remove(afdeling);
-            }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AfdelingExists(int id)
+        private bool MedewerkerExists(int id)
         {
-          return _context.Afdelingen.Any(e => e.AfdelingId == id);
+            return _context.Medewerkers.Any(e => e.MedewerkerId == id);
         }
     }
 }

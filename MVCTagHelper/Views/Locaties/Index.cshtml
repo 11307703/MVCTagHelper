@@ -2,10 +2,13 @@
 
 @{
     ViewData["Title"] = "Index";
+    var header = "Locaties";
+    var footer = $"Locaties - {DateTime.Now.ToString("dd/MM/yyyy")}";
 }
 
 <h1>Index</h1>
 
+<div header="@header" >
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -39,3 +42,4 @@
 }
     </tbody>
 </table>
+</div>

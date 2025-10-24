@@ -9,5 +9,7 @@ namespace MVCTagHelper.Data
         public DbSet<Afdeling> Afdelingen { get; set; }
         public DbSet<Land> Landen { get; set; }
         public DbSet<Locatie> Locaties { get; set; }
+
+        public DbSet<Medewerker> Medewerkers { get; set; }
     }
 }
