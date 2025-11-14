@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVCTagHelper.Models;
+using MVCTagHelper.ViewModels;
 using System.Diagnostics;
 
 namespace MVCTagHelper.Controllers
@@ -19,6 +20,18 @@ namespace MVCTagHelper.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult SearchForm()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SearchForm(SearchViewModel vm)
         {
             return View();
         }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCTagHelper.Data;
 using MVCTagHelper.Models;
+using MVCTagHelper.ViewModels;
 
 namespace MVCTagHelper.Controllers
 {
@@ -156,9 +157,55 @@ namespace MVCTagHelper.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public IActionResult SearchForm()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SearchForm(SearchViewModel vm)
+        {
+            //Na de post van ons formulier, open SearchResults.
+            var medewerkers = _context.Medewerkers
+                .Include(x => x.Afdeling)
+                .Where(x => x.Naam.Contains(vm.SearchName) || x.Voornaam.Contains(vm.SearchName)).ToList();
+            if (medewerkers.Count == 0)
+            {
+               return View();
+            }
+
+            var results = new SearchResultsViewModel();
+            results.Medewerkers = medewerkers;
+            results.AfdelingInfo = AfdelingInfoViewModel(medewerkers);
+
+
+            return View("SearchResults", results);
+        }
+
+        private IEnumerable<AfdelingInfoViewModel> AfdelingInfoViewModel(IEnumerable<Medewerker> mws)
+        {
+            var info = mws.Select(x => new AfdelingInfoViewModel
+            {
+                AfdelingId = x.AfdelingId,
+                AfdelingNaam = x.Afdeling.AfdelingNaam,
+                MedewerkerNaam = $"{x.Voornaam} {x.Naam}"
+            });
+
+            return info;
+        }
+        public IActionResult SearchResults(IEnumerable<Medewerker> mws)
+        {
+            var vm = new SearchResultsViewModel();
+            vm.Medewerkers = mws;
+            return View(vm);
+        }
+
         private bool MedewerkerExists(int id)
         {
             return _context.Medewerkers.Any(e => e.MedewerkerId == id);
         }
+
+
     }
 }

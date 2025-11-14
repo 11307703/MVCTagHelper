@@ -34,6 +34,15 @@
             @RenderBody()
         </div>
     </div>
+
+<footer class="footer bg-secondary text-white p-2">
+     <a background-color="primary" asp-controller="Medewerkers"
+               asp-action="Land">Medewerkers-Land</a>
+     <a background-color="primary" asp-controller="Afdelingen"
+               asp-action="SelectAfdeling">Afdeling-Medewerkers-Land</a>
+     <a background-color="primary" asp-controller="Home"
+               asp-action="SearchForm">Search-Form</a>
+</footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

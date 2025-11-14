@@ -1,0 +1,84 @@
+﻿@using MVCTagHelper.ViewModels
+@model SearchResultsViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Search results</h1>
+<h2>Medewerkers</h2>
+
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Naam
+            </th>
+            <th>
+                Voornaam
+            </th>
+            <th>
+                Email
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Medewerkers!)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Naam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Voornaam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.MedewerkerId">Details</a> 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<h2>Afdeling info</h2>
+
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Naam Afdeling
+            </th>
+            <th>
+                Naam Medewerker
+            </th>
+            <th>
+                Info
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.AfdelingInfo!)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AfdelingNaam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MedewerkerNaam)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-controller="Afdelingen" asp-route-id="@item.AfdelingId">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
