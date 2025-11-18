@@ -1,0 +1,19 @@
+﻿@using MVCTagHelper.ViewModels
+@model SearchViewModel
+<h4>Zoek een afdeling op naam</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SearchFormAfdelingen">
+            <div class="form-group">
+                <label asp-for="SearchName" class="control-label">Zoek afdeling</label>
+                <input asp-for="SearchName" class="form-control" />
+            </div>
+            <br />
+
+            <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCTagHelper.Data;
 using MVCTagHelper.Models;
+using MVCTagHelper.ViewModels;
 
 namespace MVCTagHelper.Controllers
 {
@@ -152,6 +153,34 @@ namespace MVCTagHelper.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult SearchForm()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SearchForm(SearchViewModel vm)
+        {
+            var land = _context.Landen
+                .Where(x => x.LandNaam.Contains(vm.SearchName) || x.LandNaam == vm.SearchName).ToList();
+
+            if (land.Count == 0)
+            {
+                return View();
+            }
+
+            return View("SearchResults",land);
+        }
+
+        public IActionResult SearchResults(IEnumerable<Land> land)
+        {
+
+            return View(land);
+        }
+
+
 
         private bool LandExists(int id)
         {

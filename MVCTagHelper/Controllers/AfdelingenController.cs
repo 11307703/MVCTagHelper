@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCTagHelper.Data;
 using MVCTagHelper.Models;
+using MVCTagHelper.ViewModels;
 
 namespace MVCTagHelper.Controllers
 {
@@ -160,6 +161,51 @@ namespace MVCTagHelper.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult SearchFormAfdelingen()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SearchFormAfdelingen(SearchViewModel vm)
+        {
+            var afdeling = _context.Afdelingen
+                .Include(a => a.Locatie)
+                    .ThenInclude(l => l.Land)
+                .Where(x => x.AfdelingNaam.Contains(vm.SearchName)).ToList();   
+            if (afdeling.Count == 0)
+            {
+                  return View();
+            }
+
+            var results = new SearchResultsViewModel();
+            results.Afdelingen = afdeling;
+            results.AfdelingLandInfo = AfdelingLandViewModel(afdeling);
+            return View("SearchResults", results);
+        }
+
+        private IEnumerable<AfdelingLandViewModel> AfdelingLandViewModel(IEnumerable<Afdeling> afd)
+        {
+            var info = afd.Select(x => new AfdelingLandViewModel()
+            {
+                AfdelingId = x.AfdelingId,
+                AfdelingNaam = x.AfdelingNaam,
+                Land = x.Locatie?.Land?.LandNaam
+            });
+
+            return info;
+
+        }
+
+        public IActionResult SearchResults(IEnumerable<Afdeling> afd)
+        {
+            var vm = new SearchResultsViewModel();
+            vm.AfdelingLandInfo = (IEnumerable<AfdelingLandViewModel>?)afd;
+            return View(vm);
+        }
+
 
         private bool AfdelingExists(int id)
         {

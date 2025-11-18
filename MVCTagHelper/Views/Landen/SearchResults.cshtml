@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Land>
+
+<h1>Search results</h1>
+<h2>Landen</h2>
+
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Land ID
+            </th>
+            <th>
+                Landcode
+            </th>
+            <th>
+                Land
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LandId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LandCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LandNaam)
+                </td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.LandId">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
